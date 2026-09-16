@@ -172,68 +172,31 @@ $(function() {
         });
     });
 })(jQuery);
-// ------------------------ smoth scroll
-(function($) {
-    "use strict";
-    $(function() {
-        const $body = $("body");
-        const $jsScroll = $(".js-scroll");
-        const speed = 0.02;
-        let offset = 0;
-        let raf;
-        if ($jsScroll.length) {
-            function setBodyHeight() {
-                const height = $jsScroll[0].getBoundingClientRect().height;
-                $body.css("height", parseInt(height, 10) + "px");
-            }
-            setBodyHeight();
-            $(window).on("resize", setBodyHeight);
-
-            function smoothScroll() {
-                offset += (window.pageYOffset - offset) * speed;
-                $jsScroll.css("transform", `translateY(-${offset}px) translateZ(0)`);
-                raf = requestAnimationFrame(smoothScroll);
-            }
-            smoothScroll();
-        }
-    });
-})(jQuery);
 // ----------------------- left counter dersign
 (function($) {
     "use strict";
     $(function() {
         let counterStarted = false;
 
-        function isInViewport($el) {
-            if ($el.length === 0) return false;
-            const elementTop = $el.offset().top;
-            const elementBottom = elementTop + $el.outerHeight();
-            const viewportTop = $(window).scrollTop();
-            const viewportBottom = viewportTop + $(window).height();
-            return elementBottom > viewportTop && elementTop < viewportBottom;
-        }
-
         function startCounter() {
+            if (counterStarted) return;
+            counterStarted = true;
             $(".count").each(function() {
                 const $this = $(this);
                 let startNumber = 0;
                 const target = parseInt($this.data("number"), 10);
-                const counter = setInterval(function() {
-                    startNumber++;
-                    $this.text(startNumber);
-                    if (startNumber >= target) {
-                        clearInterval(counter);
-                    }
-                }, 150);
+                if (target) {
+                    const counter = setInterval(function() {
+                        startNumber++;
+                        $this.text(startNumber);
+                        if (startNumber >= target) {
+                            clearInterval(counter);
+                        }
+                    }, 50);
+                }
             });
         }
-        $(window).on("scroll load", function() {
-            const $aboutData = $(".about-data");
-            if ($aboutData.length && !counterStarted && isInViewport($aboutData)) {
-                counterStarted = true;
-                startCounter();
-            }
-        });
+        startCounter();
     });
 })(jQuery);
 // ---------------------- Second counter
@@ -242,46 +205,28 @@ $(function() {
     $(function() {
         let started = false;
 
-        function isInViewport($el) {
-            const rect = $el[0].getBoundingClientRect();
-            return (
-                rect.top < (window.innerHeight || $(window).height()) &&
-                rect.bottom >= 0
-            );
-        }
-
         function startCounter() {
+            if (started) return;
+            started = true;
             $(".counter-js").each(function() {
                 const $counter = $(this);
                 let count = 0;
                 const target = parseInt($counter.data("count"), 10);
-
-                function updateCount() {
-                    if (count < target) {
-                        count++;
-                        $counter.text(count);
-                        setTimeout(updateCount, 10);
-                    } else {
-                        $counter.text(target);
+                if (target) {
+                    function updateCount() {
+                        if (count < target) {
+                            count++;
+                            $counter.text(count);
+                            setTimeout(updateCount, 10);
+                        } else {
+                            $counter.text(target);
+                        }
                     }
+                    updateCount();
                 }
-                updateCount();
             });
         }
-        $(window).on("scroll", function() {
-            if (!started) {
-                const $triggerElements = $(".bihind-the-squre");
-                $triggerElements.each(function() {
-                    if (isInViewport($(this))) {
-                        started = true;
-                        setTimeout(function() {
-                            startCounter();
-                        }, 2000);
-                        return false;
-                    }
-                });
-            }
-        });
+        startCounter();
     });
 })(jQuery);
 // --------------------- appointment slider
@@ -439,20 +384,8 @@ $(document).ready(function() {
         type: "iframe",
     });
 });
-/*----------------------- Whole Page Scrolling Animation -----------------------------*/
-$(document).ready(function() {
-    let observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            $(entry.target).toggleClass("show", entry.isIntersecting);
-        });
-    });
-    let hiddenElements = $(
-        ".fade_up, .fade_down, .zoom_in, .zoom_out, .fade_right, .fade_left, .flip_left, .flip_right, .flip_up, .flip_down"
-    );
-    hiddenElements.each(function() {
-        observer.observe(this);
-    });
-});
+/*----------------------- Whole Page Scrolling Animation Removed -----------------------------*/
+
 // --------------------- separate scroll
 $(window).on("scroll", function() {
     const scrollTop = parseInt($(this).scrollTop(), 10);
@@ -466,17 +399,6 @@ $(window).on("scroll", function() {
 (function($) {
     "use strict";
     $(document).on("DOMContentLoaded", function() {
-        let progressAnimated = false;
-
-        function isInViewport($el) {
-            if ($el.length === 0) return false;
-            const elementTop = $el.offset().top;
-            const elementBottom = elementTop + $el.outerHeight();
-            const viewportTop = $(window).scrollTop();
-            const viewportBottom = viewportTop + $(window).height();
-            return elementBottom > viewportTop && elementTop < viewportBottom;
-        }
-
         function startProgress() {
             setTimeout(function() {
                 $(".progress-bar").each(function() {
@@ -503,13 +425,9 @@ $(window).on("scroll", function() {
                 });
             }, 100);
         }
-        $(window).on("scroll resize", function() {
-            const $target = $(".data-term-team");
-            if ($target.length && !progressAnimated && isInViewport($target)) {
-                progressAnimated = true;
-                startProgress();
-            }
-        });
+        if ($(".data-term-team").length || $(".progress-bar").length) {
+            startProgress();
+        }
     });
 })(jQuery);
 // ----------------------------------- FAQ data
@@ -535,11 +453,6 @@ $(window).on("scroll", function() {
                 $(".load-more").css("visibility", "hidden");
                 $(".data-spot-testimonial").css("display", "none");
             }
-            $("html, body").animate({
-                    scrollTop: $(this).offset().top,
-                },
-                1000
-            );
         });
     });
 })(jQuery);
@@ -555,11 +468,6 @@ $(window).on("scroll", function() {
                 $(".load-more").css("visibility", "hidden");
                 $(".data-spot-testimonial").css("display", "none");
             }
-            $("html, body").animate({
-                    scrollTop: $(this).offset().top,
-                },
-                1000
-            );
         });
     });
 })(jQuery);
@@ -575,11 +483,6 @@ $(window).on("scroll", function() {
                 $(".load-more").css("visibility", "hidden");
                 $(".data-spot-testimonial").css("display", "none");
             }
-            $("html, body").animate({
-                    scrollTop: $(this).offset().top,
-                },
-                1000
-            );
         });
     });
 })(jQuery);
@@ -704,8 +607,9 @@ $(function() {
         },
     ];
     $(document).ready(function() {
-        const cols = 3;
         const $main = $("#main");
+        if (!$main.length) return;
+        const cols = 3;
         const parts = [];
         let current = 0;
         let playing = false;
@@ -905,11 +809,6 @@ $(document).ready(function() {
                 $loadMoreBtn.css("visibility", "hidden");
                 $testimonial.hide();
             }
-            $("html, body").animate({
-                    scrollTop: $loadMoreBtn.offset().top,
-                },
-                600
-            );
         });
     });
 })(jQuery);
@@ -1174,9 +1073,7 @@ $(".slider-coming").slick({
         });
         $scrollBtn.on("click", function(e) {
             e.preventDefault();
-            $("html, body").animate({
-                scrollTop: 0
-            }, 600);
+            window.scrollTo(0, 0);
         });
     });
 })(jQuery);
@@ -1221,70 +1118,6 @@ $(document).ready(function() {
             });
         });
 });
-// ---------------------- trelxt
-(function($) {
-    "use strict";
-    $(function() {
-        var $textElements = $(".title-about");
-
-        function updateTextProgress() {
-            var scrollTop = $(window).scrollTop();
-            var windowHeight = $(window).height();
-            $textElements.each(function() {
-                var $el = $(this);
-                var elOffset = $el.offset().top;
-                var start = elOffset - windowHeight * 0.8;
-                var end = elOffset - windowHeight * 0.2;
-                var progress = (scrollTop - start) / (end - start);
-                progress = Math.max(0, Math.min(1, progress));
-                $el.css("background-size", progress * 100 + "% 100%");
-            });
-        }
-        var ticking = false;
-        $(window).on("scroll resize", function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    updateTextProgress();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        updateTextProgress();
-    });
-})(jQuery);
-// ---------------------------------- services-detail-title
-(function($) {
-    "use strict";
-    $(function() {
-        var $textElements = $(".services-detail-title");
-
-        function updateTextProgress() {
-            var scrollTop = $(window).scrollTop();
-            var windowHeight = $(window).height();
-            $textElements.each(function() {
-                var $el = $(this);
-                var elOffset = $el.offset().top;
-                var start = elOffset - windowHeight * 0.8;
-                var end = elOffset - windowHeight * 0.2;
-                var progress = (scrollTop - start) / (end - start);
-                progress = Math.max(0, Math.min(1, progress));
-                $el.css("background-size", progress * 100 + "% 100%");
-            });
-        }
-        var ticking = false;
-        $(window).on("scroll resize", function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    updateTextProgress();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        updateTextProgress();
-    });
-})(jQuery);
 // ---------------------------------------- Click data Offered
 (function() {
     "use strict";

@@ -110,74 +110,27 @@ body {
 }
 
 .js-scroll {
-    overflow: hidden;
     width: 100%;
-    will-change: transform;
 }
 
 .fade_up,
 .fade_down,
 .zoom_in,
-.zoom_out {
-    opacity: 0;
-    transition: all 2s;
-}
-
-.fade_up {
-    transform: translateY(-100%);
-}
-
-.fade_down {
-    transform: translateY(100%);
-}
-
-.zoom_in {
-    transform: scale(0.5);
-}
-
-.zoom_out {
-    transform: scale(1.5);
-}
-
-.fade_right {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: all 2s;
-}
-
-.fade_left {
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 2s;
-}
-
-.flip_left {
-    opacity: 0;
-    transform: perspective(400px) rotateY(-90deg);
-    transition: all 2s;
-}
-
-.flip_right {
-    opacity: 0;
-    transform: perspective(400px) rotateY(90deg);
-    transition: all 2s;
-}
-
-.flip_up {
-    opacity: 0;
-    transform: perspective(400px) rotateX(-90deg);
-    transition: all 2s;
-}
-
+.zoom_out,
+.fade_right,
+.fade_left,
+.flip_left,
+.flip_right,
+.flip_up,
 .flip_down {
-    opacity: 0;
-    transform: perspective(400px) rotateX(90deg);
-    transition: all 2s;
+    opacity: 1;
+    transform: none;
+    transition: none;
 }
 
 .show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
 }
 
 .animation-data {
@@ -6180,36 +6133,6 @@ li.slick-active {
     margin: 0;
 }
 
-/*---------------------- text-scroll animation  */
-
-.title-about {
-    font-size: 48px;
-    font-weight: normal;
-    line-height: 64px;
-    color: #88888817;
-    background: linear-gradient(to right, #10271D, #10271D) no-repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    background-size: 50% 100%;
-    transition: background-size 0.5s cubic-bezier(.1, .5, .5, 1);
-    display: inline-block;
-}
-
-@keyframes scroll-text-color {
-    to {
-        background-size: 100%;
-    }
-}
-
-.services-detail-title {
-    color: #88888817;
-    background: linear-gradient(to right, #10271D, #10271D) no-repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    background-size: 30% 100%;
-    transition: background-size 0.5s cubic-bezier(.1, .5, .5, 1);
-    display: inline-block;
-}
 
 /* ---------------------- bottom fixed */
 
