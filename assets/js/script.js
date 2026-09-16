@@ -62,14 +62,16 @@ $(function() {
 // ------------------------------- Header scroll Active
 (function($) {
     "use strict";
-    $(window).on("scroll", function() {
-        const scrollTop = parseInt($(this).scrollTop(), 10);
-        if (scrollTop > 0) {
+    function checkHeaderScroll() {
+        const scrollTop = parseInt($(window).scrollTop(), 10);
+        if (scrollTop > 20) {
             $("[data-header]").addClass("active");
         } else {
             $("[data-header]").removeClass("active");
         }
-    });
+    }
+    $(window).on("scroll", checkHeaderScroll);
+    $(document).ready(checkHeaderScroll);
 })(jQuery);
 // ------------------------- menu open close
 (function($) {
@@ -385,16 +387,6 @@ $(document).ready(function() {
     });
 });
 /*----------------------- Whole Page Scrolling Animation Removed -----------------------------*/
-
-// --------------------- separate scroll
-$(window).on("scroll", function() {
-    const scrollTop = parseInt($(this).scrollTop(), 10);
-    if (scrollTop > 5) {
-        $("[data-header]").addClass("active");
-    } else {
-        $("[data-header]").removeClass("active");
-    }
-});
 // ------------- signle team-progress design
 (function($) {
     "use strict";
