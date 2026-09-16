@@ -9,34 +9,36 @@ $(function() {
     "use strict";
     $(function() {
         $(document).on("click", ".navbar-anchor", function(e) {
-            e.preventDefault();
             var $menu = $(this).next(".ul-design");
-            var $allMenus = $(".ul-design.show");
-            if ($menu.hasClass("show")) {
-                $menu.css({
-                    transform: "translateY(15px)",
-                    opacity: "0",
-                });
-                setTimeout(function() {
-                    $menu.removeClass("show");
-                }, 350);
-            } else {
-                $allMenus.each(function() {
-                    $(this).css({
+            if ($menu.length) {
+                e.preventDefault();
+                var $allMenus = $(".ul-design.show");
+                if ($menu.hasClass("show")) {
+                    $menu.css({
                         transform: "translateY(15px)",
                         opacity: "0",
                     });
-                    setTimeout(
-                        function() {
-                            $(this).removeClass("show");
-                        }.bind(this),
-                        350
-                    );
-                });
-                $menu.addClass("show").css({
-                    transform: "translateY(0)",
-                    opacity: "1",
-                });
+                    setTimeout(function() {
+                        $menu.removeClass("show");
+                    }, 350);
+                } else {
+                    $allMenus.each(function() {
+                        $(this).css({
+                            transform: "translateY(15px)",
+                            opacity: "0",
+                        });
+                        setTimeout(
+                            function() {
+                                $(this).removeClass("show");
+                            }.bind(this),
+                            350
+                        );
+                    });
+                    $menu.addClass("show").css({
+                        transform: "translateY(0)",
+                        opacity: "1",
+                    });
+                }
             }
         });
         $(document).on("click", function(e) {
@@ -89,16 +91,36 @@ $(function() {
 (function($) {
     "use strict";
     $(function() {
-        $(document).on("click", ".menu-anhor", function() {
+        $(document).on("click", ".menu-anhor", function(e) {
             const $clickedDropdown = $(this).next(".under-menu-li");
-            const $clickedIcon = $(this).find("i");
-            const isOpen = $clickedDropdown.hasClass("open");
-            $(".under-menu-li.open")
-                .not($clickedDropdown)
-                .each(function() {
-                    const $otherDropdown = $(this);
-                    const $otherIcon = $otherDropdown.prev(".menu-anhor").find("i");
-                    $otherDropdown.animate({
+            if ($clickedDropdown.length) {
+                e.preventDefault();
+                const $clickedIcon = $(this).find("i");
+                const isOpen = $clickedDropdown.hasClass("open");
+                $(".under-menu-li.open")
+                    .not($clickedDropdown)
+                    .each(function() {
+                        const $otherDropdown = $(this);
+                        const $otherIcon = $otherDropdown.prev(".menu-anhor").find("i");
+                        $otherDropdown.animate({
+                                height: 0,
+                                paddingTop: 0,
+                                paddingBottom: 0,
+                                opacity: 0
+                            },
+                            500,
+                            "swing",
+                            function() {
+                                $otherDropdown.removeClass("open");
+                            }
+                        );
+                        $otherIcon.css({
+                            transition: "transform 0.4s ease",
+                            transform: "rotate(0deg)",
+                        });
+                    });
+                if (isOpen) {
+                    $clickedDropdown.animate({
                             height: 0,
                             paddingTop: 0,
                             paddingBottom: 0,
@@ -107,62 +129,45 @@ $(function() {
                         500,
                         "swing",
                         function() {
-                            $otherDropdown.removeClass("open");
+                            $clickedDropdown.removeClass("open");
                         }
                     );
-                    $otherIcon.css({
+                    $clickedIcon.css({
                         transition: "transform 0.4s ease",
                         transform: "rotate(0deg)",
                     });
-                });
-            if (isOpen) {
-                $clickedDropdown.animate({
+                } else {
+                    $clickedDropdown.css({
+                        height: "auto",
+                        paddingTop: 40,
+                        paddingBottom: 20,
+                    });
+                    const fullHeight = parseInt($clickedDropdown.outerHeight(), 10);
+                    $clickedDropdown.css({
                         height: 0,
                         paddingTop: 0,
                         paddingBottom: 0,
-                        opacity: 0
-                    },
-                    500,
-                    "swing",
-                    function() {
-                        $clickedDropdown.removeClass("open");
-                    }
-                );
-                $clickedIcon.css({
-                    transition: "transform 0.4s ease",
-                    transform: "rotate(0deg)",
-                });
-            } else {
-                $clickedDropdown.css({
-                    height: "auto",
-                    paddingTop: 40,
-                    paddingBottom: 20,
-                });
-                const fullHeight = parseInt($clickedDropdown.outerHeight(), 10);
-                $clickedDropdown.css({
-                    height: 0,
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    opacity: 0,
-                });
-                $clickedDropdown
-                    .addClass("open")
-                    .animate({
-                            height: fullHeight,
-                            paddingTop: 40,
-                            paddingBottom: 20,
-                            opacity: 1,
-                        },
-                        500,
-                        "swing",
-                        function() {
-                            $clickedDropdown.css("height", "auto");
-                        }
-                    );
-                $clickedIcon.css({
-                    transition: "transform 0.4s ease",
-                    transform: "rotate(45deg)",
-                });
+                        opacity: 0,
+                    });
+                    $clickedDropdown
+                        .addClass("open")
+                        .animate({
+                                height: fullHeight,
+                                paddingTop: 40,
+                                paddingBottom: 20,
+                                opacity: 1,
+                            },
+                            500,
+                            "swing",
+                            function() {
+                                $clickedDropdown.css("height", "auto");
+                            }
+                        );
+                    $clickedIcon.css({
+                        transition: "transform 0.4s ease",
+                        transform: "rotate(45deg)",
+                    });
+                }
             }
         });
     });
