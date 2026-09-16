@@ -159,36 +159,21 @@ body {
     align-items: center;
     justify-content: center;
     margin: auto;
-    position: fixed;
+    position: absolute;
     top: 10px;
     left: 0px;
-    z-index: 9999;
+    z-index: 999;
     transition: all 0.3s ease-in-out;
 }
 
-.data-separate {
-    position: fixed;
-    top: 10px;
-}
-
-.data-all-page {
-    background-color: #10271D;
-}
-
 .design-data {
-    padding: 30px 40px;
+    padding: 40px;
     margin: 0 20px;
     border-radius: 20px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
-}
-
-.design-data.active {
-    background-color: #10271D;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .logo-nav {
@@ -927,7 +912,7 @@ body {
 }
 
 .data-design-margin {
-    margin-top: 300px;
+    margin-top: 80px;
     text-align: center;
     position: relative;
     z-index: 1;

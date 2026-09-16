@@ -59,20 +59,6 @@ $(function() {
         });
     });
 })(jQuery);
-// ------------------------------- Header scroll Active
-(function($) {
-    "use strict";
-    function checkHeaderScroll() {
-        const scrollTop = parseInt($(window).scrollTop(), 10);
-        if (scrollTop > 20) {
-            $("[data-header]").addClass("active");
-        } else {
-            $("[data-header]").removeClass("active");
-        }
-    }
-    $(window).on("scroll", checkHeaderScroll);
-    $(document).ready(checkHeaderScroll);
-})(jQuery);
 // ------------------------- menu open close
 (function($) {
     "use strict";
