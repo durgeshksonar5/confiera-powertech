@@ -674,6 +674,12 @@
         padding: 20px;
         margin: 0 15px;
     }
+    .logo-data img {
+        height: 44px;
+        max-width: 190px;
+        padding: 3px 6px;
+        border-radius: 6px;
+    }
     .text-design-font {
         margin-top: 80px;
     }
@@ -1668,13 +1674,17 @@
         row-gap: 30px;
     }
     .appoit-detail {
-        padding: 25px;
+        padding: 22px 16px;
+        border-radius: 16px;
     }
     .main-appointment {
-        row-gap: 15px;
+        margin-top: 15px;
+        row-gap: 10px;
     }
     .appoint-ment-data {
-        max-width: 320px;
+        width: 100%;
+        max-width: 100%;
+        margin-top: -60px;
     }
     .title-about {
         font-size: 24px;

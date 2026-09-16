@@ -222,20 +222,12 @@ $(function() {
     "use strict";
     $(function() {
         const images = [
-            "assets/images/appointment/image-1.png",
-            "assets/images/appointment/image-2.png",
-            "assets/images/appointment/image-3.png",
-            "assets/images/appointment/image-4.png",
+            "assets/images/appointment/solar-banner.jpg",
         ];
         let index = 0;
         const $div = $(".main-div-appoint");
         // Initial background
         $div.css("background-image", "url(" + images[index] + ")");
-        // Auto-change every 3 seconds
-        setInterval(function() {
-            index = (index + 1) % images.length;
-            $div.css("background-image", "url(" + images[index] + ")");
-        }, 3000);
     });
 })(jQuery);
 // --------------------- Date time
