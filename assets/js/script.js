@@ -1115,3 +1115,489 @@ $(document).ready(function() {
         });
     });
 })();
+
+// ==========================================================================
+// ==========================================================================
+// Centralized Lead Management API Integration & Form Controllers
+// ==========================================================================
+(function() {
+    "use strict";
+
+    const WHATSAPP_NUMBER = "919156171235";
+    const DIRECT_PHONE = "+919156171235";
+    const API_ENDPOINT = "https://leadsmanagment.hindustandigitalservices.com/api/forms/submit/0958a96f-a99b-4f47-b31f-18d20de492f8";
+
+    let currentFloatingMode = "whatsapp"; // "whatsapp" | "contact"
+
+    /**
+     * Centralized Lead submission function to Lead Management CRM API
+     */
+    async function submitLeadToCRM(leadData) {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+            const response = await fetch(API_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(leadData),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+            return response.ok;
+        } catch (err) {
+            console.warn("CRM Lead submission notice:", err.message);
+            return false;
+        }
+    }
+
+    /**
+     * Connect all on-page consultation & contact forms across the website
+     */
+    function initOnPageForms() {
+        // Find all on-page consultation containers (.main-appointment, .contact-rowed, .appoint-ment-data, .right-contact)
+        const formContainers = document.querySelectorAll(".main-appointment, .contact-rowed");
+
+        formContainers.forEach((container) => {
+            const submitBtn = container.querySelector(".butn-submit .button, .butn-submit-left .button, .butn-submit a, .butn-submit-left a, a.button");
+            if (!submitBtn) return;
+
+            // Ensure we prevent duplicate event listener bindings
+            if (submitBtn.dataset.leadBound === "true") return;
+            submitBtn.dataset.leadBound = "true";
+
+            submitBtn.addEventListener("click", async function(e) {
+                e.preventDefault();
+
+                // Locate inputs within this container
+                const nameInput = container.querySelector('input[placeholder*="Name"], input[autocomplete="name"], input[type="text"]:not(#datepicker):not(.mega-input)');
+                const emailInput = container.querySelector('input[type="email"], input[name="email"], input[placeholder*="Email"]');
+                const phoneInput = container.querySelector('input[type="tel"], input[name="phone"], input[placeholder*="Phone"]');
+                const dateInput = container.querySelector('#datepicker, .mega-input, input[placeholder*="Date"]');
+                const selectHome = container.querySelector('select.select-home, select');
+                const billInput = container.querySelector('input[type="number"], input[placeholder*="Bill"]');
+                const messageInput = container.querySelector('textarea.textarea-box, textarea');
+
+                // Extract values
+                const name = nameInput ? nameInput.value.trim() : "";
+                const email = emailInput ? emailInput.value.trim() : "";
+                const phone = phoneInput ? phoneInput.value.trim() : "";
+                const preferredDate = dateInput ? dateInput.value.trim() : "";
+                const projectType = selectHome ? selectHome.value.trim() : "";
+                const monthlyBill = billInput ? billInput.value.trim() : "";
+                const messageText = messageInput ? messageInput.value.trim() : "";
+
+                // Reset previous error highlights
+                container.querySelectorAll(".input-appoint, .input-appoint-beat").forEach(el => el.classList.remove("has-error"));
+                let existingAlert = container.querySelector(".consultation-form-alert");
+                if (existingAlert) existingAlert.remove();
+
+                // Validate Name
+                let isValid = true;
+                if (!name || name.length < 2) {
+                    if (nameInput) {
+                        const parent = nameInput.closest(".input-appoint, .input-appoint-beat");
+                        if (parent) parent.classList.add("has-error");
+                        nameInput.focus();
+                    }
+                    isValid = false;
+                }
+
+                // Validate Phone
+                const cleanPhone = phone.replace(/[^0-9]/g, "");
+                if (!phone || cleanPhone.length < 10) {
+                    if (phoneInput) {
+                        const parent = phoneInput.closest(".input-appoint, .input-appoint-beat");
+                        if (parent) parent.classList.add("has-error");
+                        if (isValid) phoneInput.focus();
+                    }
+                    isValid = false;
+                }
+
+                // Validate Email (if entered)
+                if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    if (emailInput) {
+                        const parent = emailInput.closest(".input-appoint, .input-appoint-beat");
+                        if (parent) parent.classList.add("has-error");
+                        if (isValid) emailInput.focus();
+                    }
+                    isValid = false;
+                }
+
+                if (!isValid) return;
+
+                // Build detailed message payload
+                let fullMessage = messageText;
+                const details = [];
+                if (projectType && projectType !== "Sector / Property Type") details.push(`Project Type: ${projectType}`);
+                if (monthlyBill) details.push(`Monthly Bill: ₹${monthlyBill}`);
+                if (preferredDate) details.push(`Preferred Date: ${preferredDate}`);
+
+                if (details.length > 0) {
+                    fullMessage = fullMessage ? `${fullMessage}\n[${details.join(" | ")}]` : details.join(" | ");
+                }
+
+                // Prevent double submissions - UI loading state
+                submitBtn.style.pointerEvents = "none";
+                submitBtn.style.opacity = "0.75";
+                const btnTextSpan = submitBtn.querySelector(".btn-text");
+                const originalBtnText = btnTextSpan ? btnTextSpan.textContent : submitBtn.textContent;
+                if (btnTextSpan) {
+                    btnTextSpan.textContent = "Submitting...";
+                }
+
+                const leadPayload = {
+                    name: name,
+                    phone: phone,
+                    email: email || "",
+                    message: fullMessage || "Solar Consultation Request",
+                    source: "website_contact_form",
+                    page_url: window.location.href,
+                    page_title: document.title
+                };
+
+                const isSuccess = await submitLeadToCRM(leadPayload);
+
+                // Restore button state
+                submitBtn.style.pointerEvents = "auto";
+                submitBtn.style.opacity = "1";
+                if (btnTextSpan) {
+                    btnTextSpan.textContent = originalBtnText;
+                }
+
+                // Display Status Alert
+                const alertBox = document.createElement("div");
+                if (isSuccess) {
+                    alertBox.className = "consultation-form-alert success";
+                    alertBox.innerHTML = `<i class="ri-checkbox-circle-fill"></i> <span>Thank you! Your enquiry has been submitted successfully. Our solar specialist will contact you shortly.</span>`;
+                    
+                    // Clear inputs
+                    if (nameInput) nameInput.value = "";
+                    if (emailInput) emailInput.value = "";
+                    if (phoneInput) phoneInput.value = "";
+                    if (dateInput) dateInput.value = "";
+                    if (billInput) billInput.value = "";
+                    if (messageInput) messageInput.value = "";
+                    if (selectHome) selectHome.selectedIndex = 0;
+                } else {
+                    alertBox.className = "consultation-form-alert error";
+                    alertBox.innerHTML = `<i class="ri-error-warning-fill"></i> <span>Something went wrong. Please try again.</span>`;
+                }
+
+                container.appendChild(alertBox);
+
+                setTimeout(() => {
+                    if (alertBox && alertBox.parentNode) {
+                        alertBox.remove();
+                    }
+                }, 7000);
+            });
+        });
+    }
+
+    /**
+     * Initialize Floating WhatsApp & Contact Buttons and Compact Floating Lead Card
+     */
+    function initFloatingWidgets() {
+        // Prevent duplicate containers
+        if (!document.querySelector(".floating-actions")) {
+            const floatingActionsHTML = `
+                <div class="floating-actions" id="floatingActions">
+                    <button type="button" class="floating-action floating-whatsapp" id="floatingWhatsappBtn" aria-label="Contact us on WhatsApp">
+                        <i class="ri-whatsapp-fill"></i>
+                        <span>WhatsApp</span>
+                    </button>
+                    <button type="button" class="floating-action floating-contact" id="floatingContactBtn" aria-label="Contact us">
+                        <i class="ri-phone-fill"></i>
+                        <span>Contact</span>
+                    </button>
+                </div>
+            `;
+            document.body.insertAdjacentHTML("beforeend", floatingActionsHTML);
+        }
+
+        // Prevent duplicate modal
+        if (!document.getElementById("floatingLeadModalOverlay")) {
+            const modalHTML = `
+                <div class="floating-lead-modal-overlay" id="floatingLeadModalOverlay" role="dialog" aria-modal="true" aria-labelledby="floatingLeadTitle">
+                    <div class="floating-lead-modal">
+                        <div class="floating-lead-modal-header theme-whatsapp" id="floatingLeadHeader">
+                            <button type="button" class="floating-lead-modal-close" id="floatingLeadCloseBtn" aria-label="Close modal">&times;</button>
+                            <div class="floating-lead-badge" id="floatingLeadBadge">
+                                <i class="ri-whatsapp-fill"></i>
+                                <span>WhatsApp Enquiry</span>
+                            </div>
+                            <h3 class="floating-lead-modal-title" id="floatingLeadTitle">Chat with ConfiEra Solar Expert</h3>
+                            <p class="floating-lead-modal-subtitle" id="floatingLeadSubtitle">Enter your details to initiate WhatsApp chat with our technical specialist.</p>
+                        </div>
+                        <div class="floating-lead-modal-body">
+                            <form class="floating-lead-form" id="floatingLeadForm" novalidate>
+                                <div class="floating-lead-field">
+                                    <label for="floatingLeadName" class="floating-lead-label">Your Name *</label>
+                                    <div class="floating-lead-input-wrap">
+                                        <input type="text" id="floatingLeadName" class="floating-lead-input" placeholder="Enter your full name" required autocomplete="name">
+                                        <i class="ri-user-line"></i>
+                                    </div>
+                                    <div class="floating-lead-error" id="floatingLeadNameError">Please enter your name.</div>
+                                </div>
+
+                                <div class="floating-lead-field">
+                                    <label for="floatingLeadPhone" class="floating-lead-label">Contact Number *</label>
+                                    <div class="floating-lead-input-wrap">
+                                        <input type="tel" id="floatingLeadPhone" class="floating-lead-input" placeholder="Enter contact number" required autocomplete="tel" maxlength="15">
+                                        <i class="ri-phone-line"></i>
+                                    </div>
+                                    <div class="floating-lead-error" id="floatingLeadPhoneError">Please enter a valid 10-digit contact number.</div>
+                                </div>
+
+                                <div class="floating-lead-field">
+                                    <label for="floatingLeadMessage" class="floating-lead-label">Message</label>
+                                    <div class="floating-lead-input-wrap">
+                                        <textarea id="floatingLeadMessage" class="floating-lead-textarea" placeholder="Optional message or query..."></textarea>
+                                        <i class="ri-chat-3-line" style="top: 13px;"></i>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="floating-lead-submit theme-whatsapp" id="floatingLeadSubmitBtn">
+                                    <i class="ri-whatsapp-fill" id="floatingLeadSubmitIcon"></i>
+                                    <span id="floatingLeadSubmitText">Continue</span>
+                                </button>
+
+                                <div class="floating-lead-status" id="floatingLeadStatus"></div>
+
+                                <div class="floating-lead-direct-call">
+                                    <span>Prefer to speak directly?</span>
+                                    <a href="tel:${DIRECT_PHONE}">Call +91 9156171235</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML("beforeend", modalHTML);
+        }
+
+        bindFloatingEvents();
+    }
+
+    function bindFloatingEvents() {
+        const whatsappBtn = document.getElementById("floatingWhatsappBtn");
+        const contactBtn = document.getElementById("floatingContactBtn");
+        const modalOverlay = document.getElementById("floatingLeadModalOverlay");
+        const closeBtn = document.getElementById("floatingLeadCloseBtn");
+        const leadForm = document.getElementById("floatingLeadForm");
+        const nameInput = document.getElementById("floatingLeadName");
+        const phoneInput = document.getElementById("floatingLeadPhone");
+
+        if (whatsappBtn) {
+            whatsappBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                openFloatingLeadModal("whatsapp");
+            });
+        }
+
+        if (contactBtn) {
+            contactBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                openFloatingLeadModal("contact");
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function() {
+                closeFloatingLeadModal();
+            });
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener("click", function(e) {
+                if (e.target === modalOverlay) {
+                    closeFloatingLeadModal();
+                }
+            });
+        }
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && modalOverlay && modalOverlay.classList.contains("active")) {
+                closeFloatingLeadModal();
+            }
+        });
+
+        if (nameInput) {
+            nameInput.addEventListener("input", function() {
+                const err = document.getElementById("floatingLeadNameError");
+                if (err) err.style.display = "none";
+            });
+        }
+
+        if (phoneInput) {
+            phoneInput.addEventListener("input", function() {
+                const err = document.getElementById("floatingLeadPhoneError");
+                if (err) err.style.display = "none";
+            });
+        }
+
+        if (leadForm) {
+            leadForm.addEventListener("submit", handleFloatingLeadSubmit);
+        }
+    }
+
+    function openFloatingLeadModal(mode) {
+        currentFloatingMode = mode;
+        const modalOverlay = document.getElementById("floatingLeadModalOverlay");
+        const header = document.getElementById("floatingLeadHeader");
+        const badge = document.getElementById("floatingLeadBadge");
+        const title = document.getElementById("floatingLeadTitle");
+        const subtitle = document.getElementById("floatingLeadSubtitle");
+        const submitBtn = document.getElementById("floatingLeadSubmitBtn");
+        const submitIcon = document.getElementById("floatingLeadSubmitIcon");
+        const submitText = document.getElementById("floatingLeadSubmitText");
+        const statusBox = document.getElementById("floatingLeadStatus");
+
+        if (!modalOverlay) return;
+
+        // Reset errors and status
+        const nameErr = document.getElementById("floatingLeadNameError");
+        const phoneErr = document.getElementById("floatingLeadPhoneError");
+        if (nameErr) nameErr.style.display = "none";
+        if (phoneErr) phoneErr.style.display = "none";
+        if (statusBox) {
+            statusBox.style.display = "none";
+            statusBox.className = "floating-lead-status";
+        }
+        if (submitBtn) submitBtn.disabled = false;
+
+        if (mode === "whatsapp") {
+            if (header) header.className = "floating-lead-modal-header theme-whatsapp";
+            if (badge) badge.innerHTML = `<i class="ri-whatsapp-fill"></i> <span>WhatsApp Quick Connect</span>`;
+            if (title) title.textContent = "Chat with ConfiEra Solar Expert";
+            if (subtitle) subtitle.textContent = "Enter your details to initiate WhatsApp chat with our technical specialist.";
+            if (submitBtn) submitBtn.className = "floating-lead-submit theme-whatsapp";
+            if (submitIcon) submitIcon.className = "ri-whatsapp-fill";
+            if (submitText) submitText.textContent = "Continue to WhatsApp";
+        } else {
+            if (header) header.className = "floating-lead-modal-header theme-contact";
+            if (badge) badge.innerHTML = `<i class="ri-phone-fill"></i> <span>Instant Solar Callback</span>`;
+            if (title) title.textContent = "Request a Solar Consultation";
+            if (subtitle) subtitle.textContent = "Leave your contact details and our solar engineer will call you right back.";
+            if (submitBtn) submitBtn.className = "floating-lead-submit theme-contact";
+            if (submitIcon) submitIcon.className = "ri-phone-fill";
+            if (submitText) submitText.textContent = "Request Callback";
+        }
+
+        modalOverlay.classList.add("active");
+        setTimeout(function() {
+            const nameInput = document.getElementById("floatingLeadName");
+            if (nameInput) nameInput.focus();
+        }, 120);
+    }
+
+    function closeFloatingLeadModal() {
+        const modalOverlay = document.getElementById("floatingLeadModalOverlay");
+        if (modalOverlay) {
+            modalOverlay.classList.remove("active");
+        }
+    }
+
+    async function handleFloatingLeadSubmit(e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById("floatingLeadName");
+        const phoneInput = document.getElementById("floatingLeadPhone");
+        const messageInput = document.getElementById("floatingLeadMessage");
+        const submitBtn = document.getElementById("floatingLeadSubmitBtn");
+        const submitText = document.getElementById("floatingLeadSubmitText");
+        const statusBox = document.getElementById("floatingLeadStatus");
+
+        const name = nameInput ? nameInput.value.trim() : "";
+        const phone = phoneInput ? phoneInput.value.trim() : "";
+        const message = messageInput ? messageInput.value.trim() : "";
+
+        let isValid = true;
+
+        if (!name || name.length < 2) {
+            const err = document.getElementById("floatingLeadNameError");
+            if (err) err.style.display = "block";
+            if (nameInput) nameInput.focus();
+            isValid = false;
+        }
+
+        const phoneClean = phone.replace(/[^0-9]/g, "");
+        if (!phone || phoneClean.length < 10) {
+            const err = document.getElementById("floatingLeadPhoneError");
+            if (err) err.style.display = "block";
+            if (isValid && phoneInput) phoneInput.focus();
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Double-submission protection
+        if (submitBtn) submitBtn.disabled = true;
+        const originalText = submitText ? submitText.textContent : "Submit";
+        if (submitText) submitText.textContent = "Submitting...";
+
+        const leadPayload = {
+            name: name,
+            phone: phone,
+            message: message || (currentFloatingMode === "whatsapp" ? "WhatsApp Consultation Request" : "Solar Callback Request"),
+            source: currentFloatingMode === "whatsapp" ? "floating_whatsapp_button" : "floating_contact_button",
+            page_url: window.location.href,
+            page_title: document.title
+        };
+
+        const isSuccess = await submitLeadToCRM(leadPayload);
+
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitText) submitText.textContent = originalText;
+
+        if (isSuccess) {
+            if (statusBox) {
+                statusBox.className = "floating-lead-status success";
+                statusBox.innerHTML = `<strong>Thank you!</strong><br>Your enquiry has been submitted successfully.`;
+                statusBox.style.display = "block";
+            }
+
+            if (currentFloatingMode === "whatsapp") {
+                const waText = `Hello ConfiEra PowerTech,\nI would like to enquire about Solar Solutions.\n\n*Name:* ${name}\n*Phone:* ${phone}${message ? '\n*Message:* ' + message : ''}`;
+                const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
+
+                setTimeout(function() {
+                    window.open(waUrl, "_blank");
+                    closeFloatingLeadModal();
+                    if (nameInput) nameInput.value = "";
+                    if (phoneInput) phoneInput.value = "";
+                    if (messageInput) messageInput.value = "";
+                }, 900);
+            } else {
+                setTimeout(function() {
+                    closeFloatingLeadModal();
+                    if (nameInput) nameInput.value = "";
+                    if (phoneInput) phoneInput.value = "";
+                    if (messageInput) messageInput.value = "";
+                }, 2500);
+            }
+        } else {
+            if (statusBox) {
+                statusBox.className = "floating-lead-status error";
+                statusBox.innerHTML = `Something went wrong. Please try again.`;
+                statusBox.style.display = "block";
+            }
+        }
+    }
+
+    function initAll() {
+        initFloatingWidgets();
+        initOnPageForms();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+        initAll();
+    }
+})();
