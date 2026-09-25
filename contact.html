@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="assets/css/slick.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/media.css">
+    <link rel="stylesheet" href="assets/css/solar-calculator.css">
 </head>
 
 <body>
@@ -334,6 +335,451 @@
             </div>
         </div>
         <!-- ========================= [ Error section all separate Exit ] ========================= -->
+
+        <!-- ========================= [ Solar Calculator Section Start ] ========================= -->
+        <section class="solar-calculator-section" id="solar-calculator">
+            <div class="container">
+                <div class="solar-calculator-container">
+                    <!-- Section Header -->
+                    <div class="solar-calc-header">
+                        <div class="solar-calc-badge">
+                            <span class="dot"></span>
+                            <span>Calculate Your Solar ROI</span>
+                        </div>
+                        <h2 class="solar-calc-title">
+                            Solar Savings <span>Calculator</span>
+                        </h2>
+                        <p class="solar-calc-subtitle">
+                            Estimate your recommended solar plant size, annual electricity bill savings, subsidy eligibility under PM Surya Ghar Yojana, and net investment payback in seconds.
+                        </p>
+                    </div>
+
+                    <!-- Calculator Input Card -->
+                    <div class="solar-calc-card">
+                        <!-- STEP 1: Method Selection -->
+                        <div class="solar-step-block">
+                            <div class="solar-step-indicator">
+                                <span class="solar-step-num">1</span>
+                                <span>STEP ONE</span>
+                            </div>
+                            <h3 class="solar-step-heading">How would you like to calculate?</h3>
+                            
+                            <div class="solar-method-grid">
+                                <div class="solar-method-card active" data-method="bill">
+                                    <div class="solar-method-icon">
+                                        <i class="ri-money-rupee-circle-fill"></i>
+                                    </div>
+                                    <h4 class="solar-method-title">Monthly Bill</h4>
+                                    <p class="solar-method-desc">Enter your average monthly electricity bill amount</p>
+                                </div>
+                                <div class="solar-method-card" data-method="units">
+                                    <div class="solar-method-icon">
+                                        <i class="ri-flashlight-fill"></i>
+                                    </div>
+                                    <h4 class="solar-method-title">Monthly Units</h4>
+                                    <p class="solar-method-desc">Enter electricity consumption in kWh</p>
+                                </div>
+                                <div class="solar-method-card" data-method="area">
+                                    <div class="solar-method-icon">
+                                        <i class="ri-home-4-fill"></i>
+                                    </div>
+                                    <h4 class="solar-method-title">Roof Area</h4>
+                                    <p class="solar-method-desc">Enter your available rooftop area in sq.ft</p>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Input Container -->
+                            <div class="solar-input-container">
+                                <!-- Option 1: Monthly Bill -->
+                                <div class="solar-input-wrap" id="solarInputBillWrap">
+                                    <label class="solar-input-label" for="solarBillInput">
+                                        <i class="ri-bill-line"></i>
+                                        <span>Average Monthly Electricity Bill</span>
+                                    </label>
+                                    <div class="solar-field-wrapper">
+                                        <span class="solar-field-prefix">₹</span>
+                                        <input type="number" id="solarBillInput" class="solar-field-input" placeholder="e.g. 5000" min="1" step="1" value="5000">
+                                        <span class="solar-field-suffix">/ month</span>
+                                    </div>
+                                </div>
+
+                                <!-- Option 2: Monthly Units -->
+                                <div class="solar-input-wrap" id="solarInputUnitsWrap" style="display: none;">
+                                    <label class="solar-input-label" for="solarUnitsInput">
+                                        <i class="ri-speed-up-line"></i>
+                                        <span>Monthly Electricity Consumption</span>
+                                    </label>
+                                    <div class="solar-field-wrapper">
+                                        <span class="solar-field-prefix"><i class="ri-flashlight-line"></i></span>
+                                        <input type="number" id="solarUnitsInput" class="solar-field-input" placeholder="e.g. 450" min="1" step="1">
+                                        <span class="solar-field-suffix">kWh / month</span>
+                                    </div>
+                                </div>
+
+                                <!-- Option 3: Roof Area -->
+                                <div class="solar-input-wrap" id="solarInputAreaWrap" style="display: none;">
+                                    <label class="solar-input-label" for="solarAreaInput">
+                                        <i class="ri-layout-grid-line"></i>
+                                        <span>Available Shadow-Free Rooftop Area</span>
+                                    </label>
+                                    <div class="solar-field-wrapper">
+                                        <span class="solar-field-prefix"><i class="ri-home-gear-line"></i></span>
+                                        <input type="number" id="solarAreaInput" class="solar-field-input" placeholder="e.g. 800" min="50" step="10">
+                                        <span class="solar-field-suffix">sq.ft</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: Location & Customer Category -->
+                        <div class="solar-step-block">
+                            <div class="solar-step-indicator">
+                                <span class="solar-step-num">2</span>
+                                <span>STEP TWO</span>
+                            </div>
+                            <h3 class="solar-step-heading">Your Location & Customer Type</h3>
+
+                            <div class="solar-dropdown-grid">
+                                <div class="solar-select-group">
+                                    <label class="solar-input-label">
+                                        <i class="ri-map-pin-line"></i>
+                                        <span>State / Union Territory</span>
+                                    </label>
+                                    <div class="solar-select-wrapper">
+                                        <select id="solarStateSelect" class="solar-select">
+                                            <option value="Maharashtra" selected>Maharashtra</option>
+                                        </select>
+                                        <i class="ri-arrow-down-s-line solar-select-arrow"></i>
+                                    </div>
+                                </div>
+
+                                <div class="solar-select-group">
+                                    <label class="solar-input-label">
+                                        <i class="ri-building-line"></i>
+                                        <span>City</span>
+                                    </label>
+                                    <div class="solar-select-wrapper">
+                                        <select id="solarCitySelect" class="solar-select">
+                                            <option value="Pune" selected>Pune</option>
+                                        </select>
+                                        <i class="ri-arrow-down-s-line solar-select-arrow"></i>
+                                    </div>
+                                </div>
+
+                                <div class="solar-select-group" style="grid-column: 1 / -1;">
+                                    <label class="solar-input-label">
+                                        <i class="ri-user-star-line"></i>
+                                        <span>Customer Category</span>
+                                    </label>
+                                    <div class="solar-select-wrapper">
+                                        <select id="solarCategorySelect" class="solar-select">
+                                            <option value="Residential" selected>Residential (Individual Home / Housing Society)</option>
+                                            <option value="Commercial">Commercial (Offices, Malls, Retail, Hospitals)</option>
+                                            <option value="Industrial">Industrial (Factories, Warehouses, Plants)</option>
+                                            <option value="Other">Institutional & Ground Mounted</option>
+                                        </select>
+                                        <i class="ri-arrow-down-s-line solar-select-arrow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: Electricity Unit Cost (Tariff) -->
+                        <div class="solar-step-block">
+                            <div class="solar-step-indicator">
+                                <span class="solar-step-num">3</span>
+                                <span>STEP THREE</span>
+                            </div>
+                            <h3 class="solar-step-heading">Your Electricity Unit Cost</h3>
+
+                            <div class="solar-tariff-header">
+                                <div class="solar-tariff-display">
+                                    <span class="solar-tariff-val" id="solarTariffVal">₹8.50</span>
+                                    <span class="solar-tariff-sub">per kWh (unit)</span>
+                                </div>
+                                <div class="solar-tariff-direct-input">
+                                    <span>₹</span>
+                                    <input type="number" id="solarTariffInput" value="8.50" min="1" max="30" step="0.10">
+                                </div>
+                            </div>
+
+                            <div class="solar-slider-wrap">
+                                <input type="range" id="solarTariffSlider" class="solar-range-slider" min="1" max="25" step="0.25" value="8.50">
+                                <div class="solar-slider-ticks">
+                                    <span data-val="1">₹1</span>
+                                    <span data-val="8">₹8</span>
+                                    <span data-val="14">₹14</span>
+                                    <span data-val="20">₹20</span>
+                                    <span data-val="25">₹25</span>
+                                </div>
+                            </div>
+
+                            <div class="solar-info-note">
+                                <i class="ri-lightbulb-line"></i>
+                                <span>Select your state to auto-fill the average utility tariff rate (e.g. MSEDCL for Maharashtra). You can adjust it manually anytime.</span>
+                            </div>
+
+                            <!-- Validation Message -->
+                            <div class="solar-error-banner" id="solarErrorBanner">
+                                <i class="ri-error-warning-fill"></i>
+                                <span id="solarErrorText">Please review the highlighted fields.</span>
+                            </div>
+                        </div>
+
+                        <!-- Calculate Action -->
+                        <div class="solar-action-footer">
+                            <button type="button" class="solar-calculate-btn" id="solarCalculateBtn">
+                                <i class="ri-calculator-line"></i>
+                                <span>Calculate My Solar Savings</span>
+                                <i class="ri-arrow-right-line"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ==========================================================================
+                         CALCULATED SOLAR REPORT CONTAINER
+                         ========================================================================== -->
+                    <div class="solar-report-container" id="solarReportContainer">
+                        <!-- Report Header -->
+                        <div class="solar-report-header">
+                            <div class="solar-report-location-badge" id="solarReportLocBadge">
+                                <i class="ri-map-pin-2-fill"></i>
+                                <span>Pune, Maharashtra</span>
+                            </div>
+                            <h3 class="solar-report-title">Your Solar Savings Report</h3>
+                            <p class="solar-report-subtitle">Based on your inputs — engineered estimations for ConfiEra Tier-1 Solar PV</p>
+                        </div>
+
+                        <!-- Actions Bar -->
+                        <div class="solar-report-actions">
+                            <span class="solar-action-tag">Share & Export:</span>
+                            <button type="button" class="solar-share-btn btn-wa" id="solarShareWa" title="Share via WhatsApp">
+                                <i class="ri-whatsapp-fill"></i>
+                                <span>WhatsApp</span>
+                            </button>
+                            <button type="button" class="solar-share-btn btn-email" id="solarShareEmail" title="Send Report via Email">
+                                <i class="ri-mail-fill"></i>
+                                <span>Email</span>
+                            </button>
+                            <button type="button" class="solar-share-btn btn-print" id="solarSharePrint" title="Print or Save PDF">
+                                <i class="ri-printer-fill"></i>
+                                <span>Download PDF / Print</span>
+                            </button>
+                        </div>
+
+                        <!-- Hero Plant Banner -->
+                        <div class="solar-plant-hero">
+                            <div class="solar-plant-left">
+                                <span class="solar-plant-label">Recommended Solar Plant Size</span>
+                                <div class="solar-plant-size" id="solarPlantSize">3.30 <span>kWp</span></div>
+                                <span class="solar-plant-note" id="solarPlantSizeNote">Based on your monthly electricity bill</span>
+                            </div>
+                            <div class="solar-plant-right">
+                                <div class="solar-plant-pill">
+                                    <div class="solar-pill-label">Daily Generation</div>
+                                    <div class="solar-pill-value" id="solarDailyGen">13.2 kWh</div>
+                                </div>
+                                <div class="solar-plant-pill">
+                                    <div class="solar-pill-label">Peak Sun Hours</div>
+                                    <div class="solar-pill-value" id="solarSunHours">5.0 hrs/day</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 1: Electricity Generation -->
+                        <div class="solar-report-section">
+                            <div class="solar-section-title">
+                                <i class="ri-flashlight-line"></i>
+                                <span>Electricity Generation</span>
+                            </div>
+                            <div class="solar-report-card">
+                                <div class="solar-card-inner-title">
+                                    <i class="ri-checkbox-circle-line"></i>
+                                    <span>Total Clean Energy Produced by Your Solar Plant</span>
+                                </div>
+                                <div class="solar-metrics-3col">
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">Monthly</div>
+                                        <div class="solar-metric-value" id="solarGenMonthly">396 kWh</div>
+                                        <div class="solar-metric-sub">per month</div>
+                                    </div>
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">Annual</div>
+                                        <div class="solar-metric-value" id="solarGenAnnual">4,752 kWh</div>
+                                        <div class="solar-metric-sub">per year</div>
+                                    </div>
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">25-Year</div>
+                                        <div class="solar-metric-value" id="solarGen25Yr">1,08,820 kWh</div>
+                                        <div class="solar-metric-sub">lifetime generation</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Financial Savings -->
+                        <div class="solar-report-section">
+                            <div class="solar-section-title">
+                                <i class="ri-money-rupee-circle-line"></i>
+                                <span>Financial Savings</span>
+                            </div>
+                            <div class="solar-report-card">
+                                <div class="solar-card-inner-title">
+                                    <i class="ri-wallet-3-line"></i>
+                                    <span>Electricity Bill Savings <span id="solarSavingsRateNote" style="font-weight:600; color:#5C7065;">(at ₹8.50/kWh)</span></span>
+                                </div>
+                                <div class="solar-metrics-3col">
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">Monthly</div>
+                                        <div class="solar-metric-value" id="solarSaveMonthly" style="color:#2E7D32;">₹3,366</div>
+                                        <div class="solar-metric-sub">per month</div>
+                                    </div>
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">Annual</div>
+                                        <div class="solar-metric-value" id="solarSaveAnnual" style="color:#2E7D32;">₹40,392</div>
+                                        <div class="solar-metric-sub">per year</div>
+                                    </div>
+                                    <div class="solar-metric-col">
+                                        <div class="solar-metric-tag">25-Year</div>
+                                        <div class="solar-metric-value" id="solarSave25Yr" style="color:#2E7D32;">₹11.10 L</div>
+                                        <div class="solar-metric-sub">lifetime savings</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: System Cost & Subsidy -->
+                        <div class="solar-report-section">
+                            <div class="solar-section-title">
+                                <i class="ri-pie-chart-line"></i>
+                                <span>System Cost & Subsidy</span>
+                            </div>
+                            <div class="solar-report-card">
+                                <div class="solar-cost-table">
+                                    <div class="solar-cost-row" id="solarCostRow">
+                                        <span>Estimated System Turnkey Cost</span>
+                                        <span class="solar-cost-val">₹1.78 L</span>
+                                    </div>
+                                    <div class="solar-cost-row" id="solarSubsidyRow">
+                                        <span>Estimated Subsidy (PM Surya Ghar CFA)</span>
+                                        <span class="solar-cost-val" style="color:#2E7D32;">- ₹78,000</span>
+                                    </div>
+                                    <div class="solar-cost-row total-row">
+                                        <span>Your Estimated Net Investment</span>
+                                        <span class="solar-cost-val" id="solarNetCost">₹1.00 L</span>
+                                    </div>
+                                </div>
+
+                                <div class="solar-2cards-grid">
+                                    <div class="solar-highlight-card">
+                                        <span class="solar-hl-icon">⏱️</span>
+                                        <div class="solar-hl-val" id="solarPayback">2.5 Yrs</div>
+                                        <div class="solar-hl-label">Simple Payback Period</div>
+                                    </div>
+                                    <div class="solar-highlight-card">
+                                        <span class="solar-hl-icon">📈</span>
+                                        <div class="solar-hl-val" id="solarRoi">40.4%</div>
+                                        <div class="solar-hl-label">Annual Return on Investment</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Environmental & Space Requirements -->
+                        <div class="solar-report-section">
+                            <div class="solar-section-title">
+                                <i class="ri-earth-line"></i>
+                                <span>Environmental Impact & Roof Requirement</span>
+                            </div>
+                            <div class="solar-env-grid">
+                                <div class="solar-env-box">
+                                    <div class="solar-env-icon">🌱</div>
+                                    <div class="solar-env-data">
+                                        <span class="solar-env-val" id="solarEnvCo2">89.2 T</span>
+                                        <span class="solar-env-desc">CO₂ Emissions Mitigated (25 yrs)</span>
+                                    </div>
+                                </div>
+                                <div class="solar-env-box">
+                                    <div class="solar-env-icon">🌳</div>
+                                    <div class="solar-env-data">
+                                        <span class="solar-env-val" id="solarEnvTrees">143</span>
+                                        <span class="solar-env-desc">Trees Planted Equivalent</span>
+                                    </div>
+                                </div>
+                                <div class="solar-env-box">
+                                    <div class="solar-env-icon">🏠</div>
+                                    <div class="solar-env-data">
+                                        <span class="solar-env-val" id="solarEnvRoof">238 sq.ft</span>
+                                        <span class="solar-env-desc">Estimated Roof Area Required</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Disclaimer -->
+                        <div class="solar-disclaimer">
+                            <i class="ri-information-fill"></i>
+                            <div>
+                                <strong>Technical & Commercial Note:</strong> Computations are indicative and based on Tier-1 550W modules with 80% Performance Ratio. Generation and financial returns may vary slightly depending on actual solar irradiation, orientation, shading, and DISCOM tariff revisions. Subsidy benefits follow PM Surya Ghar Muft Bijli Yojana norms for eligible residential consumers.
+                            </div>
+                        </div>
+
+                        <!-- ==============================================================
+                             LEAD INFORMATION CAPTURE FORM
+                             ============================================================== -->
+                        <div class="solar-lead-form-box">
+                            <div class="solar-lead-header">
+                                <div class="solar-lead-badge">
+                                    <i class="ri-file-shield-2-fill"></i>
+                                    <span>Official Proposal & Free Site Survey</span>
+                                </div>
+                                <h4 class="solar-lead-title">Get Your Detailed Solar Report</h4>
+                                <p class="solar-lead-desc">
+                                    Enter your contact information to receive your tailored engineering report, 3D shadow analysis, and connect directly with a ConfiEra solar specialist.
+                                </p>
+                            </div>
+
+                            <form class="solar-lead-form" id="solarLeadForm" novalidate>
+                                <div class="solar-lead-inputs-grid">
+                                    <div class="solar-lead-input-group">
+                                        <i class="ri-user-3-line solar-lead-icon"></i>
+                                        <input type="text" id="solarLeadName" class="solar-lead-input" placeholder="Your Full Name *" required autocomplete="name">
+                                        <div class="solar-lead-error" id="solarLeadNameErr">Please enter your name.</div>
+                                    </div>
+                                    <div class="solar-lead-input-group">
+                                        <i class="ri-phone-line solar-lead-icon"></i>
+                                        <input type="tel" id="solarLeadPhone" class="solar-lead-input" placeholder="Mobile Number *" required autocomplete="tel" maxlength="15">
+                                        <div class="solar-lead-error" id="solarLeadPhoneErr">Please enter a valid 10-digit number.</div>
+                                    </div>
+                                    <div class="solar-lead-input-group">
+                                        <i class="ri-mail-line solar-lead-icon"></i>
+                                        <input type="email" id="solarLeadEmail" class="solar-lead-input" placeholder="Email Address (Optional)" autocomplete="email">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="solar-lead-submit-btn" id="solarLeadSubmitBtn">
+                                    <i class="ri-send-plane-fill"></i>
+                                    <span id="solarLeadSubmitText">Get My Solar Report →</span>
+                                </button>
+
+                                <div class="solar-lead-api-error" id="solarLeadApiError">
+                                    Unable to submit your details right now. Please try again.
+                                </div>
+                            </form>
+
+                            <!-- Lead Success Confirmation -->
+                            <div class="solar-lead-success" id="solarLeadSuccess">
+                                <i class="ri-checkbox-circle-fill"></i>
+                                <h4>Thank You!</h4>
+                                <p>Your solar savings estimate and inquiry have been submitted successfully. Our engineering team will contact you shortly to review your rooftop specifics and provide a customized proposal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========================= [ Solar Calculator Section Exit ] ========================= -->
+
         <div class="bg-container">
             <div class="main-location">
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3594.2125594521262!2d73.7803317!3d18.6051864!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b96fcf29ff87%3A0xf755e3ed3ce724ee!2sConfiEra%20PowerTech%20Solutions%20Pvt%20Ltd!5e1!3m2!1sen!2sin!4v1789539934031!5m2!1sen!2sin" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -515,6 +961,8 @@
     <script src="assets/js/slick.min.js"></script>
     <!-- ====================== [ Main File ] ========================= -->
     <script src="assets/js/script.js"></script>
+    <!-- ====================== [ Solar Calculator JS ] ========================= -->
+    <script src="assets/js/solar-calculator.js"></script>
 </body>
 
 </html>
