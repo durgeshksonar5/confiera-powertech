@@ -1896,6 +1896,29 @@
     .faq-container {
         margin-top: 25px;
     }
+    .overlay-succes {
+        padding: 15px;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        width: calc(100% - 20px);
+    }
+    .sucess-title {
+        font-size: 18px;
+        line-height: 26px;
+        margin-bottom: 5px;
+    }
+    .success-desc {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .data-sucess {
+        margin-top: 10px;
+    }
+    .data-sucess .button {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
     .footer-appointment-data {
         padding: 20px;
     }

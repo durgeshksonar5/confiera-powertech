@@ -2029,6 +2029,7 @@ textarea {
     justify-content: center;
     overflow: hidden;
     border-radius: 20px;
+    width: 100%;
 }
 
 .image-data-succes {
@@ -2038,18 +2039,33 @@ textarea {
     align-items: center;
     justify-content: center;
     position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 }
 
 .image-data-succes img {
     width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.image-data-succes:hover img {
+    transform: scale(1.05);
 }
 
 .overlay-succes {
     position: absolute;
-    bottom: 10px;
-    width: 95%;
-    border-radius: 10px;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    width: calc(100% - 30px);
+    max-height: calc(100% - 30px);
+    overflow-y: auto;
+    border-radius: 12px;
     background-color: #FFF;
     padding: 20px;
     display: flex;
@@ -2060,6 +2076,8 @@ textarea {
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 2;
 }
 
 .image-data-succes:hover .overlay-succes {
