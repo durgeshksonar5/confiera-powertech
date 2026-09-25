@@ -332,8 +332,9 @@
         font-size: 16px;
         line-height: 26px;
     }
-    .blog-sec {
-        padding-bottom: 255px;
+    .faq-home-sec {
+        padding-top: 80px !important;
+        padding-bottom: 380px !important;
     }
     .footer-li a {
         font-size: 16px;
@@ -869,6 +870,10 @@
         width: 100%;
         max-width: 20px;
     }
+    .faq-home-sec {
+        padding-top: 60px !important;
+        padding-bottom: 350px !important;
+    }
     .footer-appointment-data {
         margin-top: -315px;
     }
@@ -1291,6 +1296,10 @@
     .footer {
         padding: 40px 0;
     }
+    .faq-home-sec {
+        padding-top: 50px !important;
+        padding-bottom: 330px !important;
+    }
     .footer-appointment-data {
         margin-top: -295px;
     }
@@ -1507,6 +1516,168 @@
     .home-renewable {
         font-size: 85px;
         line-height: 85px;
+    }
+    /* Mobile Footer Center Alignment */
+    .footer-main {
+        text-align: center;
+        row-gap: 35px;
+    }
+    .left-main-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+    .left-main-footer .logo-data {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 15px;
+        text-align: center;
+    }
+    .left-main-footer .logo-data img {
+        max-width: 200px;
+        margin: 0 auto;
+        display: block;
+    }
+    .main-footer-desc {
+        text-align: center;
+        margin: 0 auto 20px;
+        max-width: 480px;
+        font-size: 15px;
+        line-height: 25px;
+    }
+    .social-footer {
+        text-align: center;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .footer-social {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+    .data-center-footer {
+        justify-content: center;
+        text-align: center;
+        row-gap: 25px;
+    }
+    .data-sponch-footer {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    .line-footer-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        gap: 15px;
+    }
+    .center-footer-title {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .footer-ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .footer-li {
+        text-align: center;
+        width: 100%;
+    }
+    .footer-li a {
+        text-align: center;
+        display: inline-block;
+    }
+    .last-main-data {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 25px;
+    }
+    .last-data-footer {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 25px 20px 55px;
+        box-sizing: border-box;
+    }
+    .data-contact-footer {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .data-flex-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        gap: 10px;
+    }
+    .data-flex-footer img {
+        flex-shrink: 0;
+    }
+    .data-flex-footer p {
+        text-align: center;
+        font-size: 15px;
+        line-height: 22px;
+    }
+    .data-appoint {
+        position: absolute;
+        bottom: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        white-space: nowrap;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    }
+    .copy-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 15px;
+        padding-top: 50px;
+    }
+    .dato-copy {
+        text-align: center;
+        width: 100%;
+        font-size: 13px;
+        line-height: 22px;
+    }
+    .data-bottm-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+    .data-bottm-text p {
+        text-align: center;
+        justify-content: center;
+        font-size: 14px;
+        display: inline-flex;
+        flex-wrap: wrap;
     }
 }
 
@@ -1744,13 +1915,18 @@
         padding-right: 20px;
     }
     .data-sponch-footer {
-        width: 50%;
+        width: 100%;
+        margin-top: 15px;
     }
     .footer-main {
         padding-top: 30px;
     }
     .footer {
         padding: 30px 0;
+    }
+    .faq-home-sec {
+        padding-top: 40px !important;
+        padding-bottom: 320px !important;
     }
     .footer-appointment-data {
         margin-top: -285px;
