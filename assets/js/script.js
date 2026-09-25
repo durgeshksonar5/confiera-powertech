@@ -1125,7 +1125,7 @@ $(document).ready(function() {
 
     const WHATSAPP_NUMBER = "919156171235";
     const DIRECT_PHONE = "+919156171235";
-    const API_ENDPOINT = "https://leadsmanagment.hindustandigitalservices.com/api/forms/submit/6f693340-0c75-4a7e-8d15-ea3c0962ea4c";
+    const API_ENDPOINT = "https://leadsmanagment.hindustandigitalservices.com/api/forms/submit/0958a96f-a99b-4f47-b31f-18d20de492f8";
 
     let currentFloatingMode = "whatsapp"; // "whatsapp" | "contact"
 

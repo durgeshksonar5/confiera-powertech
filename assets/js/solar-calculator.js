@@ -35,7 +35,7 @@
         treesPerTonLifetime: 45,            // ~45 trees equivalent per ton CO2 lifetime
         degradationRate: 0.007,             // 0.7% annual solar degradation
         tariffEscalationRate: 0.03,         // 3% expected annual electricity tariff hike
-        crmEndpoint: "https://leadsmanagment.hindustandigitalservices.com/api/forms/submit/6f693340-0c75-4a7e-8d15-ea3c0962ea4c",
+        crmEndpoint: "https://leadsmanagment.hindustandigitalservices.com/api/forms/submit/0958a96f-a99b-4f47-b31f-18d20de492f8",
         whatsappNumber: "919156171235"
     };
 
@@ -839,13 +839,43 @@
                 `Estimated Roof Area Required: ${results.estimatedRoofAreaSqFt} sq.ft`
             ].filter(line => line !== "").join("\n");
 
-            // Lead Payload containing direct parameters + comprehensive message
+            // Lead Payload containing type: "other", direct parameters + comprehensive message
             const leadPayload = {
+                type: "other",
                 name: name,
                 phone: phone,
                 email: email || "",
+                message: structuredSummary,
+                source: "solar_calculator",
+                lead_source: leadSource,
+                page_url: window.location.href,
+                page_title: document.title,
+
+                // Solar Calculator Parameters (CamelCase & SnakeCase for maximum CRM compatibility)
+                calculationMethod: inputs.method,
+                customerType: inputs.customerType,
                 state: inputs.state,
                 city: inputs.city || "",
+                monthlyBill: inputs.billAmount,
+                monthlyConsumption: inputs.monthlyUnits,
+                electricityTariff: inputs.tariff,
+                roofArea: inputs.roofAreaSqFt,
+
+                recommendedSystemSize: results.actualSystemCapacity,
+                panelWattage: results.panelWattage,
+                panelCount: results.panelCount,
+                monthlyGeneration: results.monthlyGeneration,
+                annualGeneration: results.annualGeneration,
+                monthlySavings: results.monthlySavings,
+                annualSavings: results.annualSavings,
+                systemCost: results.systemCost,
+                subsidy: results.subsidy,
+                netCost: results.netCost,
+                paybackPeriod: results.paybackYears,
+                co2Reduction: results.co2Reduction25YrTons,
+                roofAreaRequired: results.estimatedRoofAreaSqFt,
+
+                // Standard field mappings
                 customer_type: inputs.customerType,
                 calculation_method: inputs.method,
                 monthly_bill: inputs.billAmount,
@@ -863,11 +893,7 @@
                 net_cost_inr: results.netCost,
                 payback_years: results.paybackYears,
                 co2_reduction_tons: results.co2Reduction25YrTons,
-                roof_area_sqft: results.estimatedRoofAreaSqFt,
-                message: structuredSummary,
-                source: leadSource,
-                page_url: window.location.href,
-                page_title: document.title
+                roof_area_sqft: results.estimatedRoofAreaSqFt
             };
 
             const isSuccess = await window.submitLeadToCRM(leadPayload);
