@@ -2122,6 +2122,16 @@ textarea {
     overflow: hidden;
     border-radius: 20px;
     height: 100%;
+    width: 100%;
+}
+
+.image-data-test img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+    display: block;
 }
 
 .client-says {
@@ -2248,11 +2258,10 @@ li.slick-active {
     height: 100%;
 }
 
-.image-testimonail-slide .slick-list {
-    height: 100%;
-}
-
-.image-testimonail-slide .slick-track {
+.image-testimonail-slide .slick-list,
+.image-testimonail-slide .slick-track,
+.image-testimonail-slide .slick-slide,
+.image-testimonail-slide .slick-slide > div {
     height: 100%;
 }
 

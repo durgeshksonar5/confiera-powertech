@@ -91,6 +91,8 @@
     }
     .image-data-test img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     .bloger-title-data-main {
         font-size: 18px;
