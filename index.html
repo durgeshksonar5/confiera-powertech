@@ -205,7 +205,11 @@
         <!-- ========================= [ hero Section Start ] ========================= -->
         <div class="bg-container data-gap m-0">
             <div class="image-home">
-                <div class="container">
+                <video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
+                    <source src="assets/imagess/dji_fly_20261001_082424_0128_1790865792294_video.MP4" type="video/mp4">
+                    <source src="assets/images/dji_fly_20261001_082424_0128_1790865792294_video.MP4" type="video/mp4">
+                </video>
+                <div class="container position-relative" style="z-index: 5;">
                     <div class="data-hero-home">
                         <div class="home-made-services animation-data">
                             <img src="assets/images/hero/power-battry.png" alt="image">
@@ -1008,7 +1012,8 @@
                                     </label>
                                     <div class="solar-select-wrapper">
                                         <select id="solarCategorySelect" class="solar-select">
-                                            <option value="Residential" selected>Residential (Individual Home / Housing Society)</option>
+                                            <option value="Residential" selected>Residential (Individual Home)</option>
+                                            <option value="Housing Society">Housing Society (Apartments / GHS / RWA)</option>
                                             <option value="Commercial">Commercial (Offices, Malls, Retail, Hospitals)</option>
                                             <option value="Industrial">Industrial (Factories, Warehouses, Plants)</option>
                                             <option value="Other">Institutional & Ground Mounted</option>

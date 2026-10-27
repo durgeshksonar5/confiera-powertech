@@ -1600,4 +1600,24 @@ $(document).ready(function() {
     } else {
         initAll();
     }
-})();
+})();
+
+// Hero Background Video Autoplay Assurance
+document.addEventListener("DOMContentLoaded", function() {
+    var heroVid = document.querySelector(".hero-bg-video");
+    if (heroVid) {
+        heroVid.muted = true;
+        var playPromise = heroVid.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(function() {
+                var playOnTouch = function() {
+                    heroVid.play();
+                    document.removeEventListener("touchstart", playOnTouch);
+                    document.removeEventListener("click", playOnTouch);
+                };
+                document.addEventListener("touchstart", playOnTouch, { once: true });
+                document.addEventListener("click", playOnTouch, { once: true });
+            });
+        }
+    }
+});

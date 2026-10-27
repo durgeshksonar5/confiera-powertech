@@ -24,12 +24,23 @@
             return 44000;
         },
         calculateSubsidy: function(kw, customerType) {
-            // PM Surya Ghar Muft Bijli Yojana Central Financial Assistance (Residential Only)
-            if (customerType !== "Residential") return 0;
+            // PM Surya Ghar Muft Bijli Yojana Central Financial Assistance (CFA)
             if (kw <= 0) return 0;
-            if (kw < 1.5) return 30000;
-            if (kw < 2.5) return 60000;
-            return 78000; // Cap at ₹78,000 for >= 3kW
+            
+            // Housing Society (GHS / RWA / Apartments) - ₹18,000 per kW up to 500 kW
+            if (customerType === "Housing Society" || customerType === "HousingSociety" || (typeof customerType === "string" && customerType.toLowerCase().includes("housing society"))) {
+                const eligibleKw = Math.min(kw, 500);
+                return Math.round(eligibleKw * 18000);
+            }
+
+            // Residential (Individual Home) - Standard PM Surya Ghar CFA
+            if (customerType === "Residential" || customerType === "Residential (Individual Home)" || (typeof customerType === "string" && customerType.toLowerCase().includes("individual"))) {
+                if (kw < 1.5) return 30000;
+                if (kw < 2.5) return 60000;
+                return 78000; // Cap at ₹78,000 for >= 3kW
+            }
+
+            return 0;
         },
         co2EmissionFactorKgPerKwh: 0.82,    // CEA Grid emission factor (~0.82 kg CO2 / kWh)
         treesPerTonLifetime: 45,            // ~45 trees equivalent per ton CO2 lifetime
@@ -722,8 +733,12 @@
 
             if (this.subsidyRowNode) {
                 if (results.subsidy > 0) {
+                    const isHousingSociety = inputs.customerType && (inputs.customerType === "Housing Society" || inputs.customerType.toLowerCase().includes("housing society"));
+                    const subsidyLabel = isHousingSociety 
+                        ? "Estimated Subsidy (PM Surya Ghar GHS @ ₹18,000/kW)" 
+                        : "Estimated Subsidy (PM Surya Ghar CFA)";
                     this.subsidyRowNode.style.display = "flex";
-                    this.subsidyRowNode.innerHTML = `<span>Estimated Subsidy (PM Surya Ghar CFA)</span><span class="solar-cost-val" style="color:#2E7D32;">- ${formatCurrencyINR(results.subsidy)}</span>`;
+                    this.subsidyRowNode.innerHTML = `<span>${subsidyLabel}</span><span class="solar-cost-val" style="color:#2E7D32;">- ${formatCurrencyINR(results.subsidy)}</span>`;
                 } else {
                     this.subsidyRowNode.style.display = "none";
                 }
