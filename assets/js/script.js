@@ -201,11 +201,12 @@ $(function() {
                 let count = 0;
                 const target = parseInt($counter.data("count"), 10);
                 if (target) {
+                    const step = Math.max(1, Math.ceil(target / 60));
                     function updateCount() {
                         if (count < target) {
-                            count++;
+                            count = Math.min(target, count + step);
                             $counter.text(count);
-                            setTimeout(updateCount, 10);
+                            setTimeout(updateCount, 16);
                         } else {
                             $counter.text(target);
                         }
@@ -222,7 +223,7 @@ $(function() {
     "use strict";
     $(function() {
         const images = [
-            "assets/images/appointment/solar-banner.jpg",
+            "assets/imagess/DSC00008.JPG",
         ];
         let index = 0;
         const $div = $(".main-div-appoint");
@@ -1602,16 +1603,18 @@ $(document).ready(function() {
     }
 })();
 
-// Hero Background Video Autoplay Assurance
+// Video Autoplay Assurance (Hero & Portfolio Video Cards)
 document.addEventListener("DOMContentLoaded", function() {
-    var heroVid = document.querySelector(".hero-bg-video");
-    if (heroVid) {
-        heroVid.muted = true;
-        var playPromise = heroVid.play();
+    var allVideos = document.querySelectorAll(".hero-bg-video, .image-data-succes video");
+    allVideos.forEach(function(vid) {
+        vid.muted = true;
+        vid.setAttribute("muted", "");
+        vid.setAttribute("playsinline", "");
+        var playPromise = vid.play();
         if (playPromise !== undefined) {
             playPromise.catch(function() {
                 var playOnTouch = function() {
-                    heroVid.play();
+                    vid.play();
                     document.removeEventListener("touchstart", playOnTouch);
                     document.removeEventListener("click", playOnTouch);
                 };
@@ -1619,5 +1622,5 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.addEventListener("click", playOnTouch, { once: true });
             });
         }
-    }
-});
+    });
+});

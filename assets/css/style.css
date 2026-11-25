@@ -904,7 +904,7 @@ body {
     width: 100%;
     overflow: hidden;
     border-radius: 20px 20px 0px 0px;
-    background-image: url(../IMG_20241028_150445.jpg);
+    background-image: url(../imagess/DSC00003.JPG);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -918,7 +918,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.35) 50%, rgba(0, 0, 0, 0.65) 100%);
 }
 
 .data-design-margin {
@@ -956,6 +956,10 @@ body {
     line-height: 24px;
     font-weight: 500;
     color: #000000;
+}
+
+.services .title-font {
+    color: #FFF;
 }
 
 .max-width-data {
@@ -1416,7 +1420,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('../images/appointment/solar-banner.jpg');
+    background-image: url('../imagess/DSC00008.JPG');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -2043,7 +2047,8 @@ textarea {
     aspect-ratio: 1 / 1;
 }
 
-.image-data-succes img {
+.image-data-succes img,
+.image-data-succes video {
     width: 100%;
     height: 100%;
     aspect-ratio: 1 / 1;
@@ -2053,8 +2058,35 @@ textarea {
     transition: transform 0.5s ease;
 }
 
-.image-data-succes:hover img {
+.image-data-succes:hover img,
+.image-data-succes:hover video {
     transform: scale(1.05);
+}
+
+.project-video-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1;
+    background: rgba(16, 39, 29, 0.85);
+    color: #9FD456;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(159, 212, 86, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.image-data-succes:hover .project-video-tag {
+    opacity: 0;
 }
 
 .overlay-succes {
@@ -6931,7 +6963,7 @@ p.service-subheading {
 }
 
 .service-detail-wrap strong {
-    color: #10271D;
+    color: #E0E0E0;
     font-weight: 700;
 }
 
@@ -7883,4 +7915,4 @@ p.service-subheading {
 .input-appoint-beat.has-error input {
     border-color: #d93025 !important;
     background-color: #fff8f8 !important;
-}
+}
